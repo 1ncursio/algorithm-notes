@@ -5,7 +5,7 @@ T = TypeVar("T")
 
 def rotate_matrix(matrix: List[List[T]]) -> List[List[T]]:
     """
-    이차원 배열을 시계방향으로 90도 회전시킨다.
+    2차원 배열을 시계방향으로 90도 회전시킨다.
     """
     n = len(matrix)
     for i in range(n // 2):
