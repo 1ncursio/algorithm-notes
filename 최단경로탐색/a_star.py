@@ -152,7 +152,7 @@ _print_shortest_distance: Callable[
 
 
 def _print_shortedst_path(
-    matrix: List[List[bool]], paths: List[Coord], start: Coord, dest: Coord,
+    matrix: List[List[bool]], paths: List[Coord], start: Coord, dest: Coord
 ) -> None:
     h = len(matrix)
     w = len(matrix[0])
@@ -199,7 +199,7 @@ if __name__ == "__main__":
         [True, True, True, True, True, True, True],
     ]
 
-    start = (6, 1)
+    start = (2, 2)
     dest = (6, 6)
     total_cost, paths, vis, heuristic_cost = a_star(matrix, start, dest)
 
