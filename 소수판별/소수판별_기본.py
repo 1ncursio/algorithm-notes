@@ -8,5 +8,6 @@ def is_prime_number(x):
     return True  # 소수임
 
 
-print(is_prime_number(4))  # 4는 소수가 아님
-print(is_prime_number(7))  # 7은 소수임
+if __name__ == "__main__":
+    print(is_prime_number(4))  # 4는 소수가 아님
+    print(is_prime_number(7))  # 7은 소수임
