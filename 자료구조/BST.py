@@ -1,12 +1,22 @@
 from typing import Optional
 
 
+class Node:
+    def __init__(
+        self, value: int, left: Optional["Node"] = None, right: Optional["Node"] = None
+    ) -> None:
+        self.value = value
+        self.left = left
+        self.right = right
+
+
 class BST:
-    root = None
+    """
+    Binary Search Tree
+    """
 
     def __init__(self) -> None:
-        self.root: Node = None
-        self.__size = 0
+        self.root: "Node" = None
 
     def search(self, value: int) -> int:
         node = self.root
@@ -20,66 +30,119 @@ class BST:
             else:
                 node = node.right
 
-    def insert(self, value: int) -> bool:
+    def insert(self, value: int) -> None:
+        node = Node(value)
         if not self.root:
-            self.root = Node(value, None, None)
-            self.__size += 1
-            return True
+            self.root = node
+            return
 
-        # 루트가 있다면 들어가삼
-        node = self.root
-        while True:
-            # 중복값 방지
-            if value == node.value:
-                return False
-            if value < node.value:
-                if node.left:
-                    node = node.left
-                else:
-                    node.left = Node(value, None, None)
-                    self.__size += 1
-                    return True
-            else:
-                if node.right:
-                    node = node.right
-                else:
-                    node.right = Node(value, None, None)
-                    self.__size += 1
-                    return True
+        prev = None
+        temp = self.root
+        while temp:
+            if value < temp.value:
+                prev = temp
+                temp = temp.left
+            elif value > temp.value:
+                prev = temp
+                temp = temp.right
 
-    def remove(self, value: int) -> bool:
-        pass
+        if value < prev.value:
+            prev.left = node
+        else:
+            prev.right = node
 
-    def dump(self):
-        def print_subtree(node: Node) -> None:
-            # 전위 순회로 출력
-            if node:
-                print(
-                    f"{node.value} {node.left.value if node.left else None} {node.right.value if node.right else None}"
-                )
-                print_subtree(node.left)
-                print_subtree(node.right)
-
+    def delete(self, value: int) -> Node:
         root = self.root
-        print_subtree(root)
 
-    # length
-    def __len__(self):
-        return self.__size
+        # Base Case
+        if not root:
+            return root
 
+        # Recursive calls for ancestors of
+        # node to be deleted
+        if value < root.value:
+            root.left = self.delete(value, self.root.left)
 
-class Node:
-    def __init__(self, value: int, left, right) -> None:
-        self.value = value
-        self.left = left
-        self.right = right
+        elif key > root.key:
+            root.right = deleteNode(root.right, key)
+            return root
+
+        # We reach here when root is the node
+        # to be deleted.
+
+        # If root node is a leaf node
+
+        if root.left is None and root.right is None:
+            return None
+
+        # If one of the children is empty
+
+        if root.left is None:
+            temp = root.right
+            root = None
+            return temp
+
+        elif root.right is None:
+            temp = root.left
+            root = None
+            return temp
+
+        # If both children exist
+
+        succParent = root
+
+        # Find Successor
+
+        succ = root.right
+
+        while succ.left != None:
+            succParent = succ
+            succ = succ.left
+
+        # Delete successor.Since successor
+        # is always left child of its parent
+        # we can safely make successor's right
+        # right child as left of its parent.
+        # If there is no succ, then assign
+        # succ->right to succParent->right
+        if succParent != root:
+            succParent.left = succ.right
+        else:
+            succParent.right = succ.right
+
+        # Copy Successor Data to root
+
+        root.key = succ.key
+
+        return root
+
+    def inorder(self):
+        temp = self.root
+        stack = []
+        while temp or stack:
+            if temp:
+                stack.append(temp)
+                temp = temp.left
+            else:
+                temp = stack.pop()
+                print(temp.value, end=" ")
+                temp = temp.right
 
 
 if __name__ == "__main__":
     bst = BST()
-    values = [50, 15, 62, 80, 7, 54, 11]
+    """
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80
+       """
+
+    values = [50, 30, 20, 40, 70, 60, 80]
     for value in values:
-        print(f"Tried to insert {value}, result: {bst.insert(value)}")
+        bst.insert(value)
     # search
-    print(f"Searching for {values[0]}, result: {bst.search(values[0])}")
-    bst.dump()
+    # print(f"Searching for {values[0]}, result: {bst.search(values[0])}")
+    print("Inorder traversal of the given tree")
+    bst.inorder()
